@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0504da2e59fdecc012d659074e9969225917230c89be928d78e2d55d35d2cd59
+-- hash: 739e893d275e3017929cfadafdb256bc378f8d6ff969fa931f2b6044ba3d5aef
 
 name:           hutton-exercises
 version:        0.1.0.0
@@ -33,6 +33,7 @@ library
       Ejercicios_cap5
       Ejercicios_cap6
       Ejercicios_cap7
+      Ejercicios_cap8
       Lib
   other-modules:
       Paths_hutton_exercises

@@ -112,7 +112,7 @@ dropWhile2 p (x:xs) | p x  = dropWhile2 p xs
 map2 :: (a -> b) -> [a] -> [b]
 map2 f [] = []
 --map2 f (x:xs) = f x : map f xs
-map2 foldl (\x y -> x : f y ) [] xs
+map2 foldr (\x y -> x : f y ) [] xs
 
 
 

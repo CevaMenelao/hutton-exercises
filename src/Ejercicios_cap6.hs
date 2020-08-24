@@ -60,5 +60,3 @@ take2 n (x:xs) = x : take2 (n-1) xs
 
 last2 :: [a]-> a
 last2 (x:xs) = if null xs then x else last2 xs
-
-

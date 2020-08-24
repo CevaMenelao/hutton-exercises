@@ -1,18 +1,19 @@
+-- |
 module Ejercicios_cap10 where
 
 import Data.Char
 
 --10_4:
 act2 :: IO (Char,Char)
-act2 = do   x <- getChar 
+act2 = do   x <- getChar
             y <- getChar
             return (x,y)
 
 --10_5:
 getLine2 :: IO String
 getLine2 = do x <- getChar
-              if x == '\n' then 
-                  return [] 
+              if x == '\n' then
+                  return []
               else do xs <- getLine2
                       return (x:xs)
 
@@ -29,12 +30,12 @@ strlen = do putStr "Enter a string: "
             putStrLn " chacters"
 
 --10_6:
-sgetLine :: IO String 
+sgetLine :: IO String
 sgetLine = do x <- getChar
-              if x == '\n' then 
-                 do putChar x 
-                    return [] 
-              else 
+              if x == '\n' then
+                 do putChar x
+                    return []
+              else
                   do  putChar '-'
                       xs <- sgetLine
                       return (x:xs)
@@ -84,10 +85,10 @@ putRow row num = do putStr (show row)
                     putStrLn (concat (replicate num "* " ))
 
 putBoard :: Board -> IO ()
-putBoard [a,b,c,d,e] = do putRow 1 a 
+putBoard [a,b,c,d,e] = do putRow 1 a
                           putRow 2 b
-                          putRow 3 c 
-                          putRow 4 d 
+                          putRow 3 c
+                          putRow 4 d
                           putRow 5 e
 
 
@@ -97,16 +98,16 @@ newline = putChar '\n'
 getDigit :: String -> IO Int
 getDigit prompt = do putStr prompt
                      x <- getLine
-                     x' = head x
+                     let x' = head x
                      newline
                      if isDigit x' then
                          return (digitToInt x')
-                     else 
+                     else
                          do putStrLn "ERROR: Invalid digit"
                             getDigit prompt
 
 play2 :: Board -> Int -> IO ()
-play2 board player = 
+play2 board player =
     do  newline
         putBoard board
         if finished board then
@@ -130,6 +131,3 @@ play2 board player =
 
 nim :: IO ()
 nim = play2 initial 1
-
-
---10_8:

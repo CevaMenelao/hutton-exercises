@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 129542fba84c2e29007438bfb1b61a1742a3617e2231399044120f585fbfd5ac
+-- hash: 31413aa26895355e8800731723632fc61791aa694152f40f5a49e1a9c879d3b6
 
 name:           hutton-exercises
 version:        0.1.0.0
@@ -28,10 +28,14 @@ source-repository head
 library
   exposed-modules:
       Asd
+      Ejercicio_cap11_3
+      Ejercicio_cap11_4
       Ejercicio_cap9_4
       Ejercicio_cap9_5
       Ejercicio_cap9_6
       Ejercicios_cap10
+      Ejercicios_cap11
+      Ejercicios_cap12
       Ejercicios_cap3
       Ejercicios_cap4
       Ejercicios_cap5
@@ -46,6 +50,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , random
   default-language: Haskell2010
 
 executable hutton-exercises-exe
@@ -58,6 +63,7 @@ executable hutton-exercises-exe
   build-depends:
       base >=4.7 && <5
     , hutton-exercises
+    , random
   default-language: Haskell2010
 
 test-suite hutton-exercises-test
@@ -71,4 +77,5 @@ test-suite hutton-exercises-test
   build-depends:
       base >=4.7 && <5
     , hutton-exercises
+    , random
   default-language: Haskell2010

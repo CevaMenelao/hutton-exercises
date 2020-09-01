@@ -235,7 +235,49 @@ play2' g p | wins O g  = putStrLn "Player O wins ! \n"
            | p == X    = do putStr "Player X is thinking ... \n"
                             let gs = bestmove' g p
                             nums <- randomRIO (0,((length gs)-1))
-                            (play2 $! (gs!!nums )) (next p)
+                            play2 (gs!!nums ) (next p)
 
 
 --11_13_3:
+
+
+
+
+data Maybe' a = Nothing' | Just' a 
+    deriving Show
+class Functor' f where
+  fmap' :: (a -> b) -> f a -> f b
+
+instance Functor' Maybe' where
+  fmap' f Nothing'     = Nothing'
+  fmap' f (Just' x) = Just' (f x) 
+
+class Functor' f => Applicative' f where
+  pure' :: a -> f a
+  (<**>) :: f (a -> b) -> f a -> f b
+
+instance Applicative' Maybe' where
+  pure' x = Just' x
+  (<**>) Nothing' _                   = Nothing'
+  (<**>) _ Nothing'                   = Nothing'
+  (<**>) (Just' g) (Just' x) = Just' (g x)
+
+class Applicative' f => Monad' f where
+  (>>==) :: f a -> (a -> f b) -> f b
+
+instance Monad' Maybe' where
+  (>>==) Nothing' _        = Nothing'
+  (>>==) (Just' x) f = f x  
+
+safediv :: (Eq a,  Fractional a) => Maybe' a -> a -> Maybe' a
+safediv (Just' x) y | y == 0    = Nothing'
+                            | otherwise = Just' (x/y)
+safediv Nothing' _  = Nothing'
+
+w :: (Eq a,  Fractional a) => Maybe' a
+w = Just' 0.5
+
+f :: (Eq a,  Fractional a) => a -> Maybe' a
+f = safediv $ (Just' 1) 
+
+w' = w >>== f  

@@ -5,17 +5,17 @@ module Ejercicios_cap12 where
     --return :: a -> m a
     --(>>=) :: m a -> (a -> m b) -> m b
 
---12_1: 
+--12_1:
 inc2 :: [Int] -> [Int]
-inc2 [] = []
+inc2 []     = []
 inc2 (n:ns) = n+1 : inc ns
 
 sqr :: [Int] -> [Int]
-sqr [] = []
+sqr []     = []
 sqr (n:ns) = n^2 : sqr ns
 
 map2 :: (a -> b) -> [a] -> [b]
-map2 f [] = []
+map2 f []     = []
 map2 f (x:xs) = f x : map2 f xs
 
 inc3 = map (+1)
@@ -39,7 +39,7 @@ data Tree a = Leaf a | Node (Tree a) (Tree a)
 
 instance Functor Tree where
 -- fmap :: (a -> b) -> Tree a -> Tree b
-    fmap g (Leaf x) = Leaf (g x)
+    fmap g (Leaf x)   = Leaf (g x)
     fmap g (Node l r) = Node (fmap g l) (fmap g r)
 
 inc :: Functor f => f Int -> f Int
@@ -59,14 +59,14 @@ getChars n = pure (:) <*> getChar <*> getChars (n-1)
 
 
 sequenceA2 :: Applicative f => [f a] -> f [a]
-sequenceA2 [] = pure []
+sequenceA2 []     = pure []
 sequenceA2 (x:xs) = pure (:) <*> x <*> sequenceA2 xs
 
 data Expr = Val Int | Div Expr Expr
 {-
 eval :: Expr -> Int
 eval (Val n) = n
-eval (Div x y) = eval x `div` eval y   
+eval (Div x y) = eval x `div` eval y
 -}
 safediv :: Int -> Int -> Maybe Int
 safediv _ 0 = Nothing
@@ -78,7 +78,7 @@ eval (Div x y) = case eval x of
     Nothing -> Nothing
     Just n -> case eval y of
         Nothing -> Nothing
-        Just m -> safediv n m
+        Just m  -> safediv n m
 
 
 --eval2 :: Expr -> Maybe Int
@@ -87,7 +87,7 @@ eval (Div x y) = case eval x of
 
 eval3 :: Expr -> Maybe Int
 eval3 (Val n) = Just n
-eval3 (Div x y) = eval3 x >>= \n -> 
+eval3 (Div x y) = eval3 x >>= \n ->
                   eval3 y >>= \m ->
                   safediv n m
 
@@ -156,7 +156,7 @@ fresh :: ST Int
 fresh = S (\n -> (n, n+1))
 
 alabel :: Tree a -> ST (Tree Int)
-alabel (Leaf _) = Leaf <$> fresh
+alabel (Leaf _)   = Leaf <$> fresh
 alabel (Node l r) = Node <$> alabel l <*> alabel r
 
 
@@ -183,7 +183,7 @@ data Tree2 a = Leaf2 | Node2 (Tree2 a) a (Tree2 a)
     deriving Show
 instance Functor' Tree2 where
 -- fmap' :: (a -> b) -> Tree2 a -> Tree2 b
-    fmap' g Leaf2 = Leaf2 
+    fmap' g Leaf2         = Leaf2
     fmap' g (Node2 l x r) = Node2 (fmap' g l) (g x) (fmap' g r)
 
 
@@ -195,7 +195,7 @@ instance Functor' Tree2 where
 --12_5_2:
 instance Functor' ((->) a) where
     --fmap' :: ( c -> b ) -> (a -> c) -> ( a -> b)
-    fmap' g h = g . h 
+    fmap' g h = g . h
 
 
 
@@ -249,7 +249,7 @@ instance Applicative' ZipList where
 -- Como (<*>) :: Aplicative f => f (a -> b) -> f a -> f b
 -- Entonces en pure g <*> pure x, pure g :: Aplicative f => f (a -> b)
 --                                pure x :: Aplicative f => f a
--- Y esta f es pure 
+-- Y esta f es pure
 
 
 
@@ -276,21 +276,21 @@ data Expr2 a = Var2 a | Val2 Int | Add2 (Expr2 a) (Expr2 a)
 
 instance Functor' Expr2 where
     -- fmap' :: (a -> b) -> Expr2 a -> Expr2 b
-    fmap' g (Var2 x) = Var2 (g x)
-    fmap' _ (Val2 x) = Val2 x
-    fmap' g (Add2 l r) = Add2 (fmap' g l) (fmap' g r) 
+    fmap' g (Var2 x)   = Var2 (g x)
+    fmap' _ (Val2 x)   = Val2 x
+    fmap' g (Add2 l r) = Add2 (fmap' g l) (fmap' g r)
 
 instance Applicative' Expr2 where
     --pure :: a -> Expr2 a
     pure' a = Var2 a
 
     -- (<**>) :: Expr2 (a -> b) -> Expr a -> Expr2 b
-    (<**>) (Var2 g) (Val2 x)    = Val2 x
-    (<**>) (Var2 g) (Var2 x)    = Var2 (g x)
-    (<**>) (Val2 y) (Val2 x)    = Add2 (Val2 y) (Val2 x)
-    (<**>) (Val2 y) _           = Val2 y
-    (<**>) (Add2 g h) x         = Add2 (g <**> x) (h <**> x) 
-    (<**>) (Var2 g) (Add2 x y)  = Add2 ((Var2 g) <**> x) ((Var2 g) <**> x) 
+    (<**>) (Var2 g) (Val2 x)   = Val2 x
+    (<**>) (Var2 g) (Var2 x)   = Var2 (g x)
+    (<**>) (Val2 y) (Val2 x)   = Add2 (Val2 y) (Val2 x)
+    (<**>) (Val2 y) _          = Val2 y
+    (<**>) (Add2 g h) x        = Add2 (g <**> x) (h <**> x)
+    (<**>) (Var2 g) (Add2 x y) = Add2 ((Var2 g) <**> x) ((Var2 g) <**> x)
 
 
 instance Monad' Expr2 where
@@ -330,28 +330,44 @@ instance Applicative ST where
 instance Monad ST where
     -- (>>=) :: ST a -> (a -> ST b) -> ST b
     st >>= f = S (\s -> let (x,s') = app st s in app (f x) s')
--}  
+-}
+
+-- type State = Int
+
+-- newtype ST a = S (State -> (a,State))
+
+-- app :: ST a -> State -> (a,State)
+-- app (S st) x = st x
+
+-- (>>==) :: ST a -> (a -> ST b) -> ST b
+-- do expr1
+--    x <- expr2
+--    expresiones x
+
 instance Functor' ST where
-    -- fmap' :: (a -> b) -> ST a -> ST b
-    fmap' g st = do let f = (\a -> S (\s->(g a,s)) ) 
-                    st >>== f
-                    
+  -- fmap' :: (a -> b) -> ST a -> ST b
+  fmap' g st = do x <- st
+                  S (\s -> (g x,s))
+  -- fmap' g st = st >>== (\a -> S (\s->(g a,s)) )
+
+
 
 --ST a :: S (State -> (a,State))
 
 instance Applicative' ST where
-    -- pure :: a -> ST a
-    pure' x = S (\s -> (x,s))
-    -- (<**>) :: ST (a -> b) -> ST a -> ST b
+  -- pure :: a -> ST a
+  pure' x = S (\s -> (x,s))
+  -- (<**>) :: ST (a -> b) -> ST a -> ST b
 
-    stf <**> stx = do let f = (\a -> let (g,s') = app stf s in S(\s->(g a,s) ) ) 
-                      let solution = stx >>== f
-                      solution
+  stf <**> stx = do
+    let f = (\a -> let (g,s') = app stf undefined in S(\s->(g a,s) ) )
+    let solution = stx >>== f
+    solution
 
 
 instance Monad' ST where
-    -- (>>==) :: ST a -> (a -> ST b) -> ST b
-    st >>== f = S (\s -> let (x,s') = app st s in app (f x) s')
+  -- (>>==) :: ST a -> (a -> ST b) -> ST b
+  st >>== f = S (\s -> let (x,s') = app st s in app (f x) s')
 
 
 
@@ -433,8 +449,8 @@ instance Monad' List' where
   (>>==) Null' _        = Null'
   (>>==) (Cons' x xs) f = case f x of
                             Null' -> Null'
-                            Cons' y ys -> Cons' y ys 
-                            Cons' y Null' -> Cons' y (xs >>== f)  
+                            Cons' y ys -> Cons' y ys
+                            Cons' y Null' -> Cons' y (xs >>== f)
 
 
 
